@@ -16,7 +16,12 @@ if ($conn->connect_error) {
     echo "Connected successfully";
     $result = $conn->query($sql);
 }
-
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST['groupButton']) && $_POST['groupButton'] == 'A') {
+        $groupQuery = "SELECT * FROM teams_table WHERE group_fk = 1";
+        $result = $conn->query($groupQuery);
+    }
+}
 ?>
 <html lang="en">
 
@@ -43,7 +48,17 @@ if ($conn->connect_error) {
     </header>
     <main>
         <section class="section1">
-
+            <div class="mx-5 my-3">
+                <button type="button" class="btn btn-secondary">View all</button>
+                <button type="button" class="A btn-secondary">Group A</button>
+                <button type="button" class="B btn-secondary">Group B</button>
+                <button type="button" class="C btn-secondary">Group C</button>
+                <button type="button" class="D btn-secondary">Group D</button>
+                <button type="button" class="E btn-secondary">Group E</button>
+                <button type="button" class="F btn-secondary">Group F</button>
+                <button type="button" class="G btn-secondary">Group G</button>
+                <button type="button" class="H btn-secondary">Group H</button>
+            </div>
             <?php
 
             while ($row = $result->fetch_assoc()) {
@@ -55,13 +70,15 @@ if ($conn->connect_error) {
                     <thead>
                         <tr>
                             <th scope="col" class="col-2"><?php echo $row["teams_id"] ?></th>
-                            <th scope="col" class="col-2"><?php echo $row["team_name"] ?></th>
+                            <th scope="col" class="col-2 p-3"><?php echo $row["team_name"] ?></th>
                             <th scope="col" class="col-2"><?php echo $row["team_coach"] ?></th>
                             <th scope="col" class="col-2"><?php echo $row["nbr_players"] ?></th>
-                            <th scope="col" class="col-2"><?php echo $row["country"] ?></th>
+                            <th scope="col" class="col-2 col"><?php echo $row["country"] ?></th>
                         </tr>
                     </thead>
+                    <?php
 
+                    ?>
 
                     <!-- <tr>
                             <th scope="row"></th>
@@ -95,6 +112,26 @@ if ($conn->connect_error) {
             <?php
             }
             ?>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Launch demo modal
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            ...
+                        </div>
+
+                    </div>
+                </div>
+            </div>
             <!-- <table class="table table-striped bg-secondary">
                 <thead>
                     <tr>
