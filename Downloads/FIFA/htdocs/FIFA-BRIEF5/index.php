@@ -4,6 +4,7 @@ $userName = "root";
 $password = "";
 $dbName = "myfirstdatabase";
 $sql = "SELECT * FROM teams_table";
+
 // Create connection
 $conn = new mysqli($serverName, $userName, $password, $dbName);
 
@@ -16,13 +17,9 @@ if ($conn->connect_error) {
     echo "Connected successfully";
     $result = $conn->query($sql);
 }
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST['groupButton']) && $_POST['groupButton'] == 'A') {
-        $groupQuery = "SELECT * FROM teams_table WHERE group_fk = 1";
-        $result = $conn->query($groupQuery);
-    }
-}
+
 ?>
+
 <html lang="en">
 
 <head>
@@ -48,19 +45,62 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </header>
     <main>
         <section class="section1">
-            <div class="mx-5 my-3">
-                <button type="button" class="btn btn-secondary">View all</button>
-                <button type="button" class="A btn-secondary">Group A</button>
-                <button type="button" class="B btn-secondary">Group B</button>
-                <button type="button" class="C btn-secondary">Group C</button>
-                <button type="button" class="D btn-secondary">Group D</button>
-                <button type="button" class="E btn-secondary">Group E</button>
-                <button type="button" class="F btn-secondary">Group F</button>
-                <button type="button" class="G btn-secondary">Group G</button>
-                <button type="button" class="H btn-secondary">Group H</button>
-            </div>
             <?php
 
+            ?>
+            <div class="mx-5 my-3">
+                <form method="post">
+                    <button onClick="window.location.reload();" class="btn btn-secondary">Refresh</button>
+
+                    <button type="submit" class="A btn btn-secondary" name="show" value="1">Group A</button>
+                    <button type="submit" class="B btn btn-secondary" name="show" value="2">Group B</button>
+                    <button type="submit" class="C btn btn-secondary" name="show" value="3">Group C</button>
+                    <button type="submit" class="D btn btn-secondary" name="show" value="4">Group D</button>
+                    <button type="submit" class="E btn btn-secondary" name="show" value="5">Group E</button>
+                    <button type="submit" class="F btn btn-secondary" name="show" value="6">Group F</button>
+                    <button type="submit" class="G btn btn-secondary" name="show" value="7">Group G</button>
+                    <button type="submit" class="H btn btn-secondary" name="show" value="8">Group H</button>
+                </form>
+            </div>
+            <?php
+            function fetchData($group)
+
+            {
+                global $conn;
+                $data = "SELECT * FROM teams_table WHERE group_fk = $group";
+                $result2 = $conn->query($data);
+
+                if ($result2->num_rows > 0) {
+                    echo "<table class='table table-striped bg-light mx-4 my-4'>
+                    <tr><th scope='col' class='col-2'>Teams ID</th>
+                    <th scope='col' class='col-2'>Teams name</th>
+                    <th scope='col' class='col-2'>Coach name</th>
+                    <th scope='col' class='col-2'>Players number</th>
+                    <th scope='col' class='col-2'>Country</th>
+                    
+                    </tr>";
+
+                    while ($row = $result2->fetch_assoc()) {
+                        echo "<tr><th>" . $row["teams_id"] . "</th><th>" . $row["team_name"] .  "</th><th>" . $row["team_coach"]
+                            . "</th><th>" . $row["nbr_players"] . "</th><th>" . $row["country"] .
+                            "</th></tr>";
+                    }
+                    echo "</table>";
+                } else {
+
+                    echo "No data found.";
+                }
+            }
+            ?>
+
+            <?php
+            if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['show'])) {
+                $selectedGroup = $_POST['show'];
+                fetchData($selectedGroup);
+            }
+
+            ?>
+            <?php
             while ($row = $result->fetch_assoc()) {
 
 
@@ -76,9 +116,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <th scope="col" class="col-2 col"><?php echo $row["country"] ?></th>
                         </tr>
                     </thead>
-                    <?php
 
-                    ?>
 
                     <!-- <tr>
                             <th scope="row"></th>
