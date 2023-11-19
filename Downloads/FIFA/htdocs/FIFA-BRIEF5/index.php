@@ -35,7 +35,7 @@ if ($conn->connect_error) {
     <header>
         <div class="overlay">
             <div class="col-12 bg-secondary d-flex justify-content-between " style="height:10vh;">
-                <img class="img-fluid" src="images/header.png" alt="" style="height: 100%;">
+                <img class="img-fluid" src="images/header-removebg-preview.png" alt="" style="height: 100% ;">
                 <p>FIFA WORLD CUP 2023</p>
             </div>
 
@@ -50,11 +50,11 @@ if ($conn->connect_error) {
             ?>
             <div class="mx-5 my-3">
                 <form method="post">
-                    <button onClick="window.location.reload();" class="btn btn-secondary">Refresh</button>
+                    <button onClick="window.location.reload();" class="btn btn-secondary ">Refresh</button>
 
                     <button type="submit" class="A btn btn-secondary" name="show" value="1">Group A</button>
                     <button type="submit" class="B btn btn-secondary" name="show" value="2">Group B</button>
-                    <button type="submit" class="C btn btn-secondary" name="show" value="3">Group C</button>
+                    <button type="submit" class="C btn btn-secondary my-3" name="show" value="3">Group C</button>
                     <button type="submit" class="D btn btn-secondary" name="show" value="4">Group D</button>
                     <button type="submit" class="E btn btn-secondary" name="show" value="5">Group E</button>
                     <button type="submit" class="F btn btn-secondary" name="show" value="6">Group F</button>
@@ -71,7 +71,8 @@ if ($conn->connect_error) {
                 $result2 = $conn->query($data);
 
                 if ($result2->num_rows > 0) {
-                    echo "<table class='table table-striped bg-light mx-4 my-4'>
+                    echo "<table class='table  bg-dark text-light mx-4 my-4'>
+                   
                     <tr><th scope='col' class='col-2'>Teams ID</th>
                     <th scope='col' class='col-2'>Teams name</th>
                     <th scope='col' class='col-2'>Coach name</th>
@@ -100,61 +101,42 @@ if ($conn->connect_error) {
             }
 
             ?>
+            <?php if (!isset($_POST['show'])) { ?>
+                <?php
+                while ($row = $result->fetch_assoc()) {
+
+
+                ?>
+
+                    <table class="table table-striped bg-light mx-4 my-4">
+                        <thead>
+                            <tr>
+
+                                <th scope="col" class="col-2"><?php echo $row["teams_id"] ?></th>
+                                <th scope="col" class="col-2 p-3"><?php echo $row["team_name"] ?></th>
+                                <th scope="col" class="col-2"><?php echo $row["team_coach"] ?></th>
+                                <th scope="col" class="col-2"><?php echo $row["nbr_players"] ?></th>
+                                <th scope="col" class="col-2 col"><?php echo $row["country"] ?></th>
+                                <th scope="col" class="col-2">
+                                    <form method="post">
+                                        <input type="hidden" name="teamId" value="<?php echo $row['teams_id']; ?>">
+                                        <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" name="showTeam" value="<?php echo $row['teams_id']; ?>">View Details</button>
+                                    </form>
+                                </th>
+                            </tr>
+                        </thead>
+
+
+                    </table>
             <?php
-            while ($row = $result->fetch_assoc()) {
-
-
-            ?>
-
-                <table class="table table-striped bg-light mx-4 my-4">
-                    <thead>
-                        <tr>
-                            <th scope="col" class="col-2"><?php echo $row["teams_id"] ?></th>
-                            <th scope="col" class="col-2 p-3"><?php echo $row["team_name"] ?></th>
-                            <th scope="col" class="col-2"><?php echo $row["team_coach"] ?></th>
-                            <th scope="col" class="col-2"><?php echo $row["nbr_players"] ?></th>
-                            <th scope="col" class="col-2 col"><?php echo $row["country"] ?></th>
-                        </tr>
-                    </thead>
-
-
-                    <!-- <tr>
-                            <th scope="row"></th>
-                            <td> </td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <th scope="row"></th>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <th scope="row"></th>
-                            <td colspan="2"></td>
-                            <td></td>
-                        </tr> -->
-                    <!-- <tr>
-                            <th scope="row"></th>
-                            <td>Larry the Bird</td>
-                            <td>@twitter</td>
-                        </tr>
-                        <tr>
-                            <th scope="row"></th>
-                            <td>Larry the Bird</td>
-                            <td>@twitter</td>
-                        </tr> -->
-
-                </table>
-            <?php
+                }
             }
             ?>
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                Launch demo modal
-            </button>
-
+            <form action="" method="post">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" name="show-details">
+                    DETAILS
+                </button>
+            </form>
             <!-- Modal -->
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
@@ -164,12 +146,15 @@ if ($conn->connect_error) {
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            ...
+                            <p>
+                                <<?php echo "<tr><th>" . $row["teams_id"] . "</th><th>" ?>< /p>
                         </div>
 
                     </div>
                 </div>
             </div>
+            <!-- Button trigger modal -->
+
             <!-- <table class="table table-striped bg-secondary">
                 <thead>
                     <tr>
@@ -267,3 +252,35 @@ if ($conn->connect_error) {
 </body>
 
 </html>
+<!-- <img src="./images/argentina.png" alt="">
+<img src="./images/australia.png" alt="">
+<img src="./images/belgique.png" alt="">
+<img src="./images/BRAZIL.png" alt="">
+<img src="./images/canada.png" alt="">
+<img src="./images/costa-rica.png" alt="">
+<img src="./images/denmark.png" alt="">
+<img src="./images/ENGLAND.png" alt="">
+<img src="./images/equador.png" alt="">
+<img src="./images/france.png" alt="">
+<img src="./images/germany.png" alt="">
+<img src="./images/GHANA.png" alt="">
+<img src="./images/iran.png" alt="">
+<img src="./images/japan.png" alt="">
+<img src="./images/korea.png" alt="">
+<img src="./images/maroc.png" alt="">
+<img src="./images/mexico.png" alt="">
+<img src="./images//netherland.png" alt="">
+<img src="./images/PERU.png" alt="">
+<img src="./images/poland.png" alt="">
+<img src="./images/PORTUGAL.png" alt="">
+<img src="./images/qatar.png" alt="">
+<img src="./images/saudiarabia.png" alt="">
+<img src="./images/senegal.png" alt="">
+<img src="./images/SERBIA.png" alt="">
+<img src="./images/spain.png" alt="">
+<img src="./images/SWITZERLAND.png" alt="">
+<img src="./images/tunisie.png" alt="">
+<img src="./images/URUGUAY.png" alt="">
+<img src="./images/usa.png" alt="">
+<img src="./images/wales.png" alt="">
+<img src="./images/croatia.png" alt=""> -->
